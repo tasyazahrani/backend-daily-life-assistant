@@ -5,6 +5,8 @@
     <title>To-Do List</title>
     <link rel="stylesheet" href="{{ asset('css/todo.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -13,18 +15,18 @@
             <div class="logo-container">
                 <h1>Daily Life Assistant</h1>
             </div>
-            <div class="sidebar-menu">
+            <nav class="sidebar-menu">
                 <ul>
-                    <li><a href="#"><i>🏠</i> Dashboard</a></li>
-                    <li class="active"><a href="#"><i>📝</i> To-Do List</a></li>
-                    <li><a href="#"><i>😊</i> Mood Tracker</a></li>
-                    <li><a href="#"><i>💰</i> Financial Tracker</a></li>
-                    <li><a href="#"><i>📜</i> Daily Quote</a></li>
-                    <li><a href="#"><i>🧘</i> Self-Care</a></li>
+                    <li><a href="/page/user/dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li class="active"><a href="todo.html"><i class="fas fa-list-check"></i> To-Do List</a></li>
+                    <li><a href="/page/user/mood.html"><i class="fas fa-face-smile"></i> Mood Tracker</a></li>
+                    <li><a href="/page/user/financial.html"><i class="fas fa-wallet"></i> Financial Tracker</a></li>
+                    <li><a href="/page/user/daily.html"><i class="fas fa-quote-left"></i> Daily Quote</a></li>
+                    <li><a href="/page/user/selfcare.html"><i class="fas fa-heart"></i> Self-Care</a></li>
                 </ul>
-            </div>
+            </nav>
             <div class="logout">
-                <a href="#"><i>🔓</i> Logout</a>
+                <a href="/Landingpage.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
 
@@ -32,7 +34,7 @@
         <div class="main-content">
             <header><h2>To-Do List</h2></header>
             <div class="add-task-container">
-                <input type="text" id="task-input" placeholder="Add a new task...">
+                <input type="text" id="task-input" placeholder="New task">
                 <button class="add-btn" onclick="addTask()">Add</button>
             </div>
             <div class="tasks-container" id="tasks-container">
