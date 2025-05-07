@@ -14,8 +14,9 @@ Route::get('/', function () {
     return view('landingpage'); // Your landing page view
 });
 
-// Rute untuk halaman register
+// Rute untuk menampilkan form registrasi (GET)
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 
 // Rute untuk halaman login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -35,4 +36,7 @@ Route::get('/todos', function () {
     return view('todos');
 });
 
+// Rute untuk halaman dashboard, hanya bisa diakses setelah login
+Route::get('/dashboard', [AuthController::class, 'showDashboard'])->middleware('auth')->name('dashboard');
 
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -16,21 +16,27 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6',
-        ]);
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|confirmed|min:6',
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+    ]);
 
-        Auth::login($user);
+    // Login pengguna setelah registrasi
+    Auth::login($user);
 
-        return redirect('/')->with('success', 'Registration successful!');
+    // Pastikan pengalihan ke dashboard berhasil
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+
+    return redirect()->route('login'); // Jika gagal login
     }
 
     public function showLoginForm()
@@ -38,18 +44,38 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function showDashboard()
+    {
+    if (Auth::check()) {
+        return view('dashboard');
+    }
+    return redirect()->route('login');
+    }
+
+
+    public function logout(Request $request)
+    {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/login');  // Arahkan ke halaman login setelah logout
+    }
+
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:6',
+    ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect('/');
-        }
+    // Cek apakah kredensial login valid
+    if (Auth::attempt($request->only('email', 'password'))) {
+        // Redirect ke dashboard setelah login sukses
+        return redirect()->route('dashboard');  // pastikan 'dashboard' adalah rute yang benar
+    }
 
-        return back()->withErrors(['email' => 'Invalid credentials']);
+    // Jika gagal login, kembalikan ke halaman login dengan pesan error
+    return back()->withErrors(['email' => 'Invalid credentials']);
     }
 }
-
