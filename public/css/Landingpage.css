@@ -185,6 +185,11 @@ header {
     position: relative;
 }
 
+img {
+    max-width: 120%;
+    height: auto;
+}
+
 .main-image {
     width: 100%;
     border-radius: var(--radius);

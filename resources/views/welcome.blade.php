@@ -48,7 +48,7 @@
                     <a href="{{ route('login') }}" class="btn btn-secondary">Masuk</a>
                 </div>
                 <div class="hero-image">
-                    <img src="assets/hero-image.png" alt="Mahasiswi menggunakan aplikasi" class="main-image">
+                <img src="{{ asset('images/user.png') }}" alt="Deskripsi Gambar">
                     <!-- Removed the floating cards for "3 Tugas Hari Ini" and "2 Jam Fokus" as requested -->
                 </div>
             </div>
@@ -118,7 +118,7 @@
             <div class="tools-grid">
                 <div class="tool-card">
                     <div class="tool-image">
-                        <img src="assets/team-1.png" alt="Team Member">
+                        <img src="{{ asset('images/tasya.jpeg') }}" alt="Deskripsi Gambar">
                     </div>
                     <div class="tool-content">
                         <h4>Tasya Zahrani</h4>
@@ -132,7 +132,7 @@
                 
                 <div class="tool-card">
                     <div class="tool-image">
-                        <img src="assets/team-2.png" alt="Team Member">
+                        <img src="{{ asset('images/nisa2.jpg') }}" alt="Deskripsi Gambar">
                     </div>
                     <div class="tool-content">
                         <h4>Anisa Ramadhani</h4>
@@ -146,7 +146,7 @@
                 
                 <div class="tool-card">
                     <div class="tool-image">
-                        <img src="assets/team-3.png" alt="Team Member">
+                        <img src="{{ asset('images/Team 4.jpeg') }}" alt="Deskripsi Gambar">
                     </div>
                     <div class="tool-content">
                         <h4>Bunga Rasikhah Haya</h4>
@@ -160,7 +160,7 @@
                 
                 <div class="tool-card">
                     <div class="tool-image">
-                        <img src="assets/team-4.png" alt="Team Member">
+                        <img src="{{ asset('images/Nicun.jpeg') }}" alt="Deskripsi Gambar">
                     </div>
                     <div class="tool-content">
                         <h4>Khairun Nisa</h4>
