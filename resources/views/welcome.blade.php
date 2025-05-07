@@ -25,8 +25,10 @@
                     </ul>
                 </nav>
                 <div class="header-buttons">
-                    <a href="/page/user/login.html" class="btn btn-secondary">Masuk</a>
-                    <a href="/page/user/signup.html" class="btn btn-primary">Daftar</a>
+                    <!-- Mengarahkan ke halaman login Laravel -->
+                    <a href="{{ route('login') }}" class="btn btn-secondary">Masuk</a>
+                    <!-- Mengarahkan ke halaman register Laravel -->
+                    <a href="{{ route('register') }}" class="btn btn-primary">Daftar</a>
                 </div>
                 <div class="menu-toggle">
                     <i class="fas fa-bars"></i>
