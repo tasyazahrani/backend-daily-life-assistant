@@ -15,7 +15,7 @@
             <img src="{{ asset('images/girl-illustration.png') }}" alt="Ilustrasi Mahasiswi" class="illustration"/>
         </div>
         <div class="right-panel">
-            <h2>Sign Up</h2>
+            <h2>Daftar</h2>
 
             <!-- Menampilkan pesan error jika ada -->
             @if ($errors->any())
@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <input type="password" name="password_confirmation" placeholder="Confirm Password" required />
                 </div>
-                <button type="submit" class="signup-btn">Sign Up</button>
+                <button type="submit" class="signup-btn">Daftar</button>
                 <p class="login-link">Already have an account? <a href="{{ route('login') }}">Login</a></p>
             </form>
         </div>
