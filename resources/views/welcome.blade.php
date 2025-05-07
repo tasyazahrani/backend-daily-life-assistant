@@ -42,10 +42,8 @@
                 <div class="hero-text">
                     <h1>Kembangkan keseimbanganmu dengan cara baru dan unik</h1>
                     <p>Sistem pendukung aktivitas harian khusus untuk mahasiswi produktif yang ingin mencapai keseimbangan hidup.</p>
-                    <button class="btn btn-primary">Mulai Sekarang</button>
-                    <div class="user-count">
-                        <img src="assets/user-avatars.png" alt="" class="avatar-group">
-                    </div>
+                    <a href="{{ route('register') }}" class="btn btn-primary">Daftar</a>
+                    <a href="{{ route('login') }}" class="btn btn-secondary">Masuk</a>
                 </div>
                 <div class="hero-image">
                     <img src="assets/hero-image.png" alt="Mahasiswi menggunakan aplikasi" class="main-image">

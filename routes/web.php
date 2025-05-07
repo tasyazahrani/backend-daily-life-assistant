@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\LandingPageController;
 
+
 Route::get('/', [LandingPageController::class, 'index']);
 
 
@@ -13,13 +14,13 @@ Route::get('/', function () {
     return view('landingpage'); // Your landing page view
 });
 
-// Registration Routes
+// Registrasi Routes
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 
 // Login Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
 // Newsletter Subscription
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
