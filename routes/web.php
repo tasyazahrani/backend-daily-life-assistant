@@ -14,13 +14,12 @@ Route::get('/', function () {
     return view('landingpage'); // Your landing page view
 });
 
-// Registrasi Routes
+// Rute untuk halaman register
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 
-// Login Routes
+// Rute untuk halaman login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+Route::post('/login', [AuthController::class, 'login']);
 
 // Newsletter Subscription
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
