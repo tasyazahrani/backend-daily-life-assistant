@@ -29,3 +29,11 @@ Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+// Route untuk halaman Todo (gunakan view 'todos.blade.php' di resources/views)
+Route::get('/todos', function () {
+    return view('todos');
+});
+
+
