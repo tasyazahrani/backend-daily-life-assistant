@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\TodoController;
+use App\Http\Controllers\FinancialController;
 
 
 Route::get('/', [LandingPageController::class, 'index']);
@@ -30,14 +32,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-use App\Http\Controllers\TodoController;
-
 Route::get('/todos', [TodoController::class, 'index']);
 Route::post('/todos', [TodoController::class, 'store']);
 Route::post('/todos/{todo}/toggle', [TodoController::class, 'toggle']);
 Route::post('/todos/{todo}/delete', [TodoController::class, 'destroy']);
 Route::post('/todos/{todo}/update', [TodoController::class, 'update']);
 
+Route::get('/financial', [FinancialController::class, 'index']);
+Route::post('/financial', [FinancialController::class, 'store'])->name('financial.store');
 
 // Rute untuk halaman dashboard, hanya bisa diakses setelah login
 Route::get('/dashboard', [AuthController::class, 'showDashboard'])->middleware('auth')->name('dashboard');
