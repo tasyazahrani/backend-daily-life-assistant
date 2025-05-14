@@ -30,11 +30,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+use App\Http\Controllers\TodoController;
 
-// Route untuk halaman Todo (gunakan view 'todos.blade.php' di resources/views)
-Route::get('/todos', function () {
-    return view('todos');
-});
+Route::get('/todos', [TodoController::class, 'index']);
+Route::post('/todos', [TodoController::class, 'store']);
+Route::post('/todos/{todo}/toggle', [TodoController::class, 'toggle']);
+Route::post('/todos/{todo}/delete', [TodoController::class, 'destroy']);
+Route::post('/todos/{todo}/update', [TodoController::class, 'update']);
+
 
 // Rute untuk halaman dashboard, hanya bisa diakses setelah login
 Route::get('/dashboard', [AuthController::class, 'showDashboard'])->middleware('auth')->name('dashboard');
