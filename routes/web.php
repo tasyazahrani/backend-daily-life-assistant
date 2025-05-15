@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\MoodTrackerController;
 
 
 Route::get('/', [LandingPageController::class, 'index']);
@@ -21,6 +22,9 @@ Route::post('/register', [AuthController::class, 'register']);
 // Rute untuk halaman login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/mood', [MoodTrackerController::class, 'index'])->name('mood');
+Route::post('/mood', [MoodTrackerController::class, 'store'])->name('mood.store');
 
 // Newsletter Subscription
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
