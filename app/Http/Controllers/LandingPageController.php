@@ -8,7 +8,7 @@ class LandingPageController extends Controller
 {
     public function showLandingPage()
     {
-        return view('landingpage');
+        return view('LandingPage');
     }
 }
 
