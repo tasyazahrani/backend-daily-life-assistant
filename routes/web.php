@@ -8,7 +8,6 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\FinancialController;
 
-
 Route::get('/', [LandingPageController::class, 'index']);
 
 
