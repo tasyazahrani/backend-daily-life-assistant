@@ -40,9 +40,10 @@
                     <li class="{{ request()->is('selfcare') ? 'active' : '' }}">
                         <a href="{{ url('selfcare') }}"><i class="fas fa-heart"></i> Self-Care</a>
                     </li>
-                    <li class="{{ request()->is('profile') ? 'active' : '' }}">
-                        <a href="{{ url('profile/1') }}"><i class="fas fa-user"></i> Profil</a>
+                    <li class="{{ request()->is('profile*') ? 'active' : '' }}">
+                         <a href="{{ url('profile/1') }}"><i class="fas fa-user"></i> Profil</a>
                     </li>
+
                 </ul>
             </nav>
             <div class="logout">
@@ -90,6 +91,26 @@
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const body = document.body;
+        const toggleButton = document.getElementById('toggle-theme');
+
+        // Apply dark mode if saved
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+        }
+
+        if (toggleButton) {
+            toggleButton.addEventListener('click', function () {
+                body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+            });
+        }
+    });
+</script>
+
 
 </body>
 </html>

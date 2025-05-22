@@ -1,43 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Life Assistant - Financial Tracker</title>
+@extends('layouts.app')
+
+@section('title', 'Financial Tracker')
+
+@push('styles')
     <link rel="stylesheet" href="{{ asset('css/financial.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo-container">
-                <h1>Daily Life Assistant</h1>
-            </div>
-            <nav class="sidebar-menu">
-                <ul>
-                    <li><a href="{{ url('/dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="{{ url('/todo') }}"><i class="fas fa-list-check"></i> To-Do List</a></li>
-                    <li><a href="{{ url('/mood') }}"><i class="fas fa-face-smile"></i> Mood Tracker</a></li>
-                    <li class="active"><a href="{{ url('/financial') }}"><i class="fas fa-wallet"></i> Financial Tracker</a></li>
-                    <li><a href="{{ url('/daily') }}"><i class="fas fa-quote-left"></i> Daily Quote</a></li>
-                    <li><a href="{{ url('/selfcare') }}"><i class="fas fa-heart"></i> Self-Care</a></li>
-                    <li><a href="{{ url('/profile') }}"><i class="fas fa-user"></i> Profil</a></li>
-                </ul>
-            </nav>
-            <div class="logout">
-                <a href="{{ url('/login') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
-        </div>
+@endpush
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <header>
-                <h2>Financial Tracker</h2>
-            </header>
+@section('content')
+    <header>
+        <h2>Financial Tracker</h2>
+    </header>
 
-            <!-- Transaction Form -->
+    <div class="dashboard-grid">
+        <!-- Transaction Form Card -->
+        <div class="card">
             <section class="transaction-form">
                 <form method="POST" action="{{ route('financial.store') }}">
                     @csrf
@@ -83,8 +61,10 @@
                     </div>
                 </form>
             </section>
+        </div>
 
-            <!-- Transaction History -->
+        <!-- Transaction History Card -->
+        <div class="card">
             <section class="transaction-history">
                 <h3>Transaction History</h3>
                 <div class="transaction-table">
@@ -98,21 +78,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($transactions as $transaction)
-                            <tr>
-                                <td>{{ $transaction->date }}</td>
-                                <td>{{ $transaction->category }}</td>
-                                <td>{{ $transaction->description }}</td>
-                                <td>{{ $transaction->type === 'expense' ? '-' : '+' }}Rp {{ number_format($transaction->amount, 0, ',', '.') }}</td>
-                            </tr>
-                            @endforeach
+                            @forelse ($transactions as $transaction)
+                                <tr>
+                                    <td>{{ $transaction->date }}</td>
+                                    <td>{{ $transaction->category }}</td>
+                                    <td>{{ $transaction->description }}</td>
+                                    <td>{{ $transaction->type === 'expense' ? '-' : '+' }}Rp {{ number_format($transaction->amount, 0, ',', '.') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">No transactions recorded yet.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
-                    </table>                    
+                    </table>
                 </div>
             </section>
         </div>
     </div>
+@endsection
 
+@push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -121,5 +107,4 @@
             });
         });
     </script>
-</body>
-</html>
+@endpush

@@ -8,7 +8,6 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\MoodTrackerController;
-use App\Http\Controllers\SelfcareController;
 
 
 Route::get('/', [LandingPageController::class, 'index']);
@@ -26,12 +25,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/mood', [MoodTrackerController::class, 'index'])->name('mood');
-Route::post('/mood', [MoodTrackerController::class, 'store'])->name('mood.store');
-
-Route::get('/selfcare', [SelfcareController::class, 'index'])->name('selfcare.index');
-Route::post('/selfcare', [SelfcareController::class, 'store'])->name('selfcare.store');
-Route::post('/selfcare/toggle/{id}', [SelfcareController::class, 'toggle'])->name('selfcare.toggle');
 
 // Newsletter Subscription
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
@@ -46,6 +39,16 @@ Route::post('/todos', [TodoController::class, 'store']);
 Route::post('/todos/{todo}/toggle', [TodoController::class, 'toggle']);
 Route::post('/todos/{todo}/delete', [TodoController::class, 'destroy']);
 Route::post('/todos/{todo}/update', [TodoController::class, 'update']);
+
+Route::middleware('auth')->group(function () {
+    // ... routes lainnya
+    
+    // Mood Tracker Routes
+    Route::get('/mood', [MoodTrackerController::class, 'index'])->name('mood.index');
+    Route::post('/moods', [MoodTrackerController::class, 'store']);
+    Route::post('/moods/{id}/update', [MoodTrackerController::class, 'update']);
+    Route::post('/moods/{id}/delete', [MoodTrackerController::class, 'destroy']);
+});
 
 Route::get('/financial', [FinancialController::class, 'index']);
 Route::post('/financial', [FinancialController::class, 'store'])->name('financial.store');
@@ -66,11 +69,36 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/delete-account', [App\Http\Controllers\ProfileController::class, 'deleteAccount'])->name('profile.delete-account');
 });
 
-Route::prefix('daily-quotes')->name('daily.quotes.')->group(function () {
-    Route::get('/', [QuoteController::class, 'index'])->name('index');
-    Route::post('/', [QuoteController::class, 'store'])->name('store');
-    Route::post('/favorite/{id}', [QuoteController::class, 'toggleFavorite'])->name('favorite');
-    Route::get('/favorites', [QuoteController::class, 'favorites'])->name('favorites');
-    Route::delete('/{id}', [QuoteController::class, 'destroy'])->name('destroy');
-    Route::get('/random', [QuoteController::class, 'random'])->name('random');
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::view('/profile', 'profile')->name('profile'); // atau pakai controller jika `show()` diperlukan
+
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
+    Route::post('/profile/delete', [ProfileController::class, 'deleteAccount'])->name('profile.delete');
+    Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
 });
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
+    Route::post('/profile/password', [ProfileController::class, 'changePassword'])->name('profile.password');
+    Route::delete('/profile/delete', [ProfileController::class, 'deleteAccount'])->name('profile.delete');
+});
+
+Route::get('/selfcare', function () {
+    return view('selfcare');
+});
+
+use App\Http\Controllers\QuoteController;
+
+Route::get('/daily', [QuoteController::class, 'index'])->name('quotes.index');
+Route::post('/daily', [QuoteController::class, 'store'])->name('quotes.store');

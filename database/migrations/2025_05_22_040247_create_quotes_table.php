@@ -11,18 +11,16 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('quotes', function (Blueprint $table) {
-            $table->id();
-            $table->text('text');
-            $table->string('author')->nullable();
-            $table->boolean('is_favorite')->default(false);
-            $table->date('quote_date')->nullable(); // tanggal quote
-            $table->timestamps();
-    
-        });
-    }
+   public function up()
+{
+    Schema::create('quotes', function (Blueprint $table) {
+        $table->id();
+        $table->text('text');
+        $table->string('author');
+        $table->date('date')->nullable(); // untuk quote sebelumnya
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
