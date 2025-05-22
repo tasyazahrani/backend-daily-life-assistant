@@ -61,3 +61,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/delete-account', [App\Http\Controllers\ProfileController::class, 'deleteAccount'])->name('profile.delete-account');
 });
 
+Route::prefix('daily-quotes')->name('daily.quotes.')->group(function () {
+    Route::get('/', [QuoteController::class, 'index'])->name('index');
+    Route::post('/', [QuoteController::class, 'store'])->name('store');
+    Route::post('/favorite/{id}', [QuoteController::class, 'toggleFavorite'])->name('favorite');
+    Route::get('/favorites', [QuoteController::class, 'favorites'])->name('favorites');
+    Route::delete('/{id}', [QuoteController::class, 'destroy'])->name('destroy');
+    Route::get('/random', [QuoteController::class, 'random'])->name('random');
+});
