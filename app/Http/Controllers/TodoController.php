@@ -9,16 +9,25 @@ class TodoController extends Controller
 {
     public function index()
 {
-    $todos = Todo::latest()->get();
+    $todos = Todo::where('user_id', auth()->id())->get(); // hanya todo milik user login
     return view('todos', compact('todos'));
 }
 
+
 public function store(Request $request)
 {
-    $request->validate(['task' => 'required']);
-    Todo::create(['task' => $request->task, 'is_completed' => false]);
-    return redirect('/todos');
+    $request->validate([
+        'task' => 'required|string|max:255',
+    ]);
+
+    Todo::create([
+        'task' => $request->task,
+        'user_id' => auth()->id(), // ← Simpan ID user yang login
+    ]);
+
+    return redirect()->back();
 }
+
 
 public function toggle(Todo $todo)
 {

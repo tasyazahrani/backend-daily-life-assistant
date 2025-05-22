@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Todo;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,12 +46,16 @@ class AuthController extends Controller
     }
 
     public function showDashboard()
-    {
+{
     if (Auth::check()) {
-        return view('dashboard');
+        // Ambil data todo, bisa juga filter berdasarkan user jika perlu
+       $todos = Todo::where('user_id', auth()->id())->get(); // hanya data user login
+
+        // Kirim data ke view dashboard
+        return view('dashboard', compact('todos'));
     }
     return redirect()->route('login');
-    }
+}
 
 
     public function logout(Request $request)

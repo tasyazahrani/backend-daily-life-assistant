@@ -36,7 +36,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/todos', [TodoController::class, 'index']);
+Route::get('/todos', [TodoController::class, 'index'])->name('todos.index');
 Route::post('/todos', [TodoController::class, 'store']);
 Route::post('/todos/{todo}/toggle', [TodoController::class, 'toggle']);
 Route::post('/todos/{todo}/delete', [TodoController::class, 'destroy']);
@@ -49,3 +49,15 @@ Route::post('/financial', [FinancialController::class, 'store'])->name('financia
 Route::get('/dashboard', [AuthController::class, 'showDashboard'])->middleware('auth')->name('dashboard');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+use App\Http\Controllers\ProfileController;
+
+Route::middleware('auth')->get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+Route::middleware('auth')->post('/profile/{id}/update', [ProfileController::class, 'update'])->name('profile.update');
+
+// Middleware auth harus dipakai supaya user harus login dulu
+Route::middleware('auth')->group(function () {
+    Route::post('/profile/change-password', [App\Http\Controllers\ProfileController::class, 'changePassword'])->name('profile.change-password');
+    Route::delete('/profile/delete-account', [App\Http\Controllers\ProfileController::class, 'deleteAccount'])->name('profile.delete-account');
+});
+
