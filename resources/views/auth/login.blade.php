@@ -41,24 +41,13 @@
                 <p>Don't have an account? <a href="{{ route('register') }}">Sign Up</a> Now</p>
             </div>
         </div>
-        <div class="illustration-container">
-            <div class="content">
-                <h2>Daily Life <span>ASSISTANT</span></h2>
-                <p>Sistem Pendukung Aktivitas Harian dan Keseimbangan Hidup untuk Mahasiswi Produktif</p>
+            <div class="illustration-container">
+                <div class="container">
+            <div class="left-panel">
+                <h1><span class="gray">Daily Life</span> <span class="bold">ASSISTANT</span></h1>
+                <p>Sistem Pendukung Aktivitas Harian dan<br/>Keseimbangan Hidup untuk<br/>Mahasiswi Produktif</p>
+                <img src="{{ asset('images/icon login.png') }}" alt="Ilustrasi Mahasiswi" class="illustration"/>
             </div>
-            <div class="illustration">
-                <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f4c5.svg" alt="Calendar" class="calendar">
-                <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f4da.svg" alt="Books" class="books">
-                <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f9d1-200d-1f4bb.svg" alt="Student" class="student">
-                <div class="decoration-items">
-                    <div class="tree"></div>
-                    <div class="tree"></div>
-                    <div class="cup"></div>
-                    <div class="book"></div>
-                </div>
-            </div>
-        </div>
-    </div>
     <script src="{{ asset('js/login.js') }}"></script>
 </body>
 </html>

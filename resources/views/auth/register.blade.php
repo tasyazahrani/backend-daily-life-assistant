@@ -12,7 +12,7 @@
         <div class="left-panel">
             <h1><span class="gray">Daily Life</span> <span class="bold">ASSISTANT</span></h1>
             <p>Sistem Pendukung Aktivitas Harian dan<br/>Keseimbangan Hidup untuk<br/>Mahasiswi Produktif</p>
-            <img src="{{ asset('images/girl-illustration.png') }}" alt="Ilustrasi Mahasiswi" class="illustration"/>
+            <img src="{{ asset('images/icon login.png') }}" alt="Ilustrasi Mahasiswi" class="illustration"/>
         </div>
         <div class="right-panel">
             <h2>Daftar</h2>
