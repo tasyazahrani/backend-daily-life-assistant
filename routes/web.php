@@ -8,6 +8,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\MoodTrackerController;
+use App\Http\Controllers\SelfcareController;
 
 
 Route::get('/', [LandingPageController::class, 'index']);
@@ -27,6 +28,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/mood', [MoodTrackerController::class, 'index'])->name('mood');
 Route::post('/mood', [MoodTrackerController::class, 'store'])->name('mood.store');
+
+Route::get('/selfcare', [SelfcareController::class, 'index'])->name('selfcare.index');
+Route::post('/selfcare', [SelfcareController::class, 'store'])->name('selfcare.store');
+Route::post('/selfcare/toggle/{id}', [SelfcareController::class, 'toggle'])->name('selfcare.toggle');
 
 // Newsletter Subscription
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
