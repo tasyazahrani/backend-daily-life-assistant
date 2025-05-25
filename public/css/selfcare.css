@@ -177,26 +177,40 @@ h3 {
     font-weight: 500;
 }
 
+/* Checkbox custom bulat */
 .checkbox {
-    width: 24px;
-    height: 24px;
-    border-radius: 5px;
-    border: 2px solid #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #b25475;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  position: relative;
+  user-select: none;
 }
 
 .checkbox:hover {
-    border-color: #b25475;
+  border-color: #a04b69;
 }
 
 .checkbox.checked {
-    background-color: #b25475;
-    border-color: #b25475;
+  background-color: #b25475;
+  border-color: #b25475;
+}
+
+.checkbox.checked::after {
+  content: "✓";
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
 }
 
 /* Add Activity Section */
@@ -322,52 +336,70 @@ h3 {
     color: #666;
 }
 
-/* Responsive Design */
-@media (max-width: 900px) {
-    .activities-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+/* Tambahan styling form input dan select biar lebih bagus */
+form select, form input[type="text"], form input[type="number"], form input[type="date"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #b25475;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 16px;
+  color: #333;
+  transition: border-color 0.3s ease;
+  outline: none;
 }
 
-@media (max-width: 768px) {
-    .main-content {
-        flex-direction: column;
-    }
-    
-    .sidebar {
-        width: 100%;
-        flex-direction: row;
-    }
-    
-    .sidebar nav ul {
-        display: flex;
-        overflow-x: auto;
-    }
-    
-    .sidebar nav ul li {
-        border-bottom: none;
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-        flex: 1;
-        min-width: 120px;
-    }
-    
-    .logout {
-        display: none;
-    }
-    
-    .activities-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .days {
-        overflow-x: auto;
-        padding-bottom: 10px;
-    }
-    
-    .mood-icons {
-        justify-content: flex-start;
-        gap: 15px;
-        overflow-x: auto;
-        padding-bottom: 10px;
-    }
+form select:hover, form input[type="text"]:hover, form input[type="number"]:hover, form input[type="date"]:hover {
+  border-color: #a04b69;
+}
+
+form select:focus, form input[type="text"]:focus, form input[type="number"]:focus, form input[type="date"]:focus {
+  border-color: #b25475;
+  box-shadow: 0 0 5px #b25475;
+}
+
+/* Transaction History Table */
+.transaction-table {
+  overflow-x: auto;
+}
+
+#transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+#transactions-table th, #transactions-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+#transactions-table th {
+  background-color: #b25475;
+  color: white;
+  font-weight: 600;
+}
+
+/* Popup Notifikasi Sukses */
+.popup-success {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #b25475;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(178, 84, 117, 0.7);
+  font-weight: 600;
+  font-size: 16px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.popup-success.show {
+  opacity: 1;
+  pointer-events: auto;
 }

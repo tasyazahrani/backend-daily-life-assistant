@@ -7,20 +7,20 @@
 @endpush
 
 @section('content')
-    <header>
-        <h2>Welcome, {{ Auth::user()->name }}</h2>
-    </header>
+<header>
+    <h2>Welcome, {{ Auth::user()->name }}</h2>
+</header>
 
-    <!-- Quote Section -->
-    <div class="quote-card">
-        <blockquote>"The only way to do great work is to love what you do."</blockquote>
-        <p class="quote-author">• Steve Jobs</p>
-    </div>
+<!-- Quote Section -->
+<div class="quote-card">
+    <blockquote>"The only way to do great work is to love what you do."</blockquote>
+    <p class="quote-author">• Steve Jobs</p>
+</div>
 
-    <!-- Dashboard Grid -->
-    <div class="dashboard-grid">
-        <!-- Today's Tasks -->
-        <div class="card">
+<!-- Dashboard Grid -->
+<div class="dashboard-grid">
+    <!-- Today's Tasks -->
+    <div class="card">
         <h3>Today's Tasks</h3>
         <div class="task-list">
             @forelse($todos as $todo)
@@ -34,71 +34,57 @@
         </div>
     </div>
 
-        <!-- Mood History -->
-        <div class="card">
-            <h3>Mood History</h3>
-            <div class="mood-history">
-                @php
-                    $moods = [
-                        ['emoji' => '😀', 'day' => 'Mon'],
-                        ['emoji' => '😃', 'day' => 'Tue'],
-                        ['emoji' => '😡', 'day' => 'Wed'],
-                        ['emoji' => '😊', 'day' => 'Thu'],
-                        ['emoji' => '🙂', 'day' => 'Fri'],
-                        ['emoji' => '😊', 'day' => 'Sat'],
-                        ['emoji' => '😊', 'day' => 'Sun'],
-                    ];
-                @endphp
-
-                @foreach($moods as $mood)
-                    <div class="mood-day">
-                        <div class="emoji">{{ $mood['emoji'] }}</div>
-                        <p>{{ $mood['day'] }}</p>
+    <!-- Mood History -->
+    <div class="card">
+        <h3>Mood History</h3>
+        <div class="mood-history">
+            @forelse($moods as $mood)
+                <div class="mood-day">
+                    <div class="emoji">{{ $mood->emoji }}</div>
+                        <p class="mood-date">{{ $mood->created_at->format('l, d M Y') }}</p>
+                        <p class="mood-text">Feeling: <strong>{{ $mood->mood }}</strong></p>
+                        <p class="diary">{{ $mood->diary_text }}</p>
                     </div>
-                @endforeach
-            </div>
-        </div>
+                </div>
+            @empty
+                <p>No mood history available.</p>
+            @endforelse
 
-        <!-- Self-Care Status -->
-        <div class="card">
-            <h3>Self-Care Status</h3>
-            <div class="self-care-list">
-                <div class="self-care-item">
-                    <div class="self-care-icon water">💧</div>
-                    <p>5/8 Glasses</p>
-                </div>
-                <div class="self-care-item">
-                    <div class="self-care-icon completed">✅</div>
-                    <p>Skincare</p>
-                </div>
-                <div class="self-care-item">
-                    <div class="self-care-icon completed">✅</div>
-                    <p>Exercise</p>
-                </div>
-                <div class="self-care-item">
-                    <div class="self-care-icon not-completed">❌</div>
-                    <p>Rest</p>
-                </div>
-            </div>
         </div>
+    </div>
 
-        <!-- Financial Summary -->
-        <div class="card">
-            <h3>Financial Summary</h3>
-            <div class="financial-summary">
-                <div class="financial-item">
-                    <p>Income :</p>
-                    <p class="income">Rp 2.500.000</p>
+    <!-- Self-Care Status -->
+    <div class="card">
+        <h3>Self-Care Status</h3>
+        <div class="self-care-list">
+            @forelse($selfcares as $item)
+                <div class="self-care-item">
+                    <div class="self-care-icon">{{ $item->icon }}</div>
+                    <p>{{ $item->description }}</p>
                 </div>
-                <div class="financial-item">
-                    <p>Expenses :</p>
-                    <p class="expenses">Rp 1.250.000</p>
-                </div>
-                <div class="financial-item balance">
-                    <p>Balance :</p>
-                    <p>Rp 1.250.000</p>
-                </div>
+            @empty
+                <p>No self-care data available.</p>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Financial Summary -->
+    <div class="card">
+        <h3>Financial Summary</h3>
+        <div class="financial-summary">
+            <div class="financial-item">
+                <p>Income :</p>
+                <p class="income">Rp {{ number_format($financial['income'], 0, ',', '.') }}</p>
+            </div>
+            <div class="financial-item">
+                <p>Expenses :</p>
+                <p class="expenses">Rp {{ number_format($financial['expenses'], 0, ',', '.') }}</p>
+            </div>
+            <div class="financial-item balance">
+                <p>Balance :</p>
+                <p>Rp {{ number_format($financial['balance'], 0, ',', '.') }}</p>
             </div>
         </div>
     </div>
+</div>
 @endsection

@@ -1,4 +1,194 @@
 /* Base styles */
+
+/* Success/Error Alert Pop-up */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    min-width: 300px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: slideInRight 0.3s ease-out;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    border-left: 4px solid #2e7d32;
+}
+
+.alert-error {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    border-left: 4px solid #c62828;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.alert.fade-out {
+    animation: slideOutRight 0.3s ease-in;
+}
+
+/* Edit and Delete Button Styling */
+.entry-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.entry-edit, .entry-delete {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.entry-edit {
+    background: linear-gradient(135deg, #a04b69, #a04b69);
+    color: white;
+}
+
+.entry-edit:hover {
+    background: linear-gradient(135deg, #a04b69, #a04b69);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+.entry-delete {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+}
+
+.entry-delete:hover {
+    background: linear-gradient(135deg, #d32f2f, #c62828);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+}
+
+/* Edit Form Styling */
+.edit-form {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.edit-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+}
+
+.edit-textarea:focus {
+    outline: none;
+    border-color: #a04b69;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.save-edit-btn, .cancel-edit {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.save-edit-btn {
+    background: linear-gradient(135deg, #a04b69, #a04b69);
+    color: white;
+}
+
+.save-edit-btn:hover {
+    background: linear-gradient(135deg, #a04b69, #a04b69);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.cancel-edit {
+    background: linear-gradient(135deg, #757575, #616161);
+    color: white;
+}
+
+.cancel-edit:hover {
+    background: linear-gradient(135deg, #616161, #424242);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(117, 117, 117, 0.3);
+}
+
+/* History Entry Improvements */
+.history-entry {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.history-entry:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.entry-date {
+    font-weight: 500;
+    color: #666;
+    font-size: 13px;
+}
+
+.entry-emoji {
+    font-size: 18px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -186,7 +376,9 @@ textarea:focus {
 }
 
 .save-btn:hover {
-    background-color: #a04b69;
+    background: linear-gradient(135deg, #a04b69);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
 }
 
 /* Mood History */
@@ -273,4 +465,6 @@ textarea:focus {
         overflow-x: auto;
         padding-bottom: 10px;
     }
+
+    
 }

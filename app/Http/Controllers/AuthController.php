@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Todo;
+use App\Models\Mood;
+use App\Models\SelfCareActivity;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -17,27 +21,23 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|confirmed|min:6',
-    ]);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|confirmed|min:6',
+        ]);
 
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-    ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
-    // Login pengguna setelah registrasi
-    Auth::login($user);
+        Auth::login($user);
 
-    // Pastikan pengalihan ke dashboard berhasil
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    }
-
-    return redirect()->route('login'); // Jika gagal login
+        return Auth::check()
+            ? redirect()->route('dashboard')
+            : redirect()->route('login');
     }
 
     public function showLoginForm()
@@ -45,42 +45,87 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function showDashboard()
-{
-    if (Auth::check()) {
-        // Ambil data todo, bisa juga filter berdasarkan user jika perlu
-       $todos = Todo::where('user_id', auth()->id())->get(); // hanya data user login
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
 
-        // Kirim data ke view dashboard
-        return view('dashboard', compact('todos'));
+        if (Auth::attempt($request->only('email', 'password'))) {
+            return redirect()->route('dashboard');
+        }
+
+        return back()->withErrors(['email' => 'Invalid credentials']);
     }
-    return redirect()->route('login');
-}
-
 
     public function logout(Request $request)
     {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    return redirect('/login');  // Arahkan ke halaman login setelah logout
+        return redirect('/login');
     }
 
-    public function login(Request $request)
+    public function showDashboard()
     {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|min:6',
-    ]);
+        if (Auth::check()) {
+            $userId = Auth::id();
 
-    // Cek apakah kredensial login valid
-    if (Auth::attempt($request->only('email', 'password'))) {
-        // Redirect ke dashboard setelah login sukses
-        return redirect()->route('dashboard');  // pastikan 'dashboard' adalah rute yang benar
-    }
+            // Todo hari ini
+            $todos = Todo::where('user_id', $userId)
+                        ->whereDate('created_at', now())
+                        ->latest()
+                        ->take(5)
+                        ->get();
 
-    // Jika gagal login, kembalikan ke halaman login dengan pesan error
-    return back()->withErrors(['email' => 'Invalid credentials']);
+            // Mood terbaru (5 terakhir)
+            $moods = Mood::where('user_id', $userId)
+                        ->latest()
+                        ->take(5)
+                        ->get();
+
+            // Self-care hari ini
+            $selfcares = SelfCareActivity::where('user_id', $userId)
+                                        ->whereDate('created_at', now())
+                                        ->latest()
+                                        ->take(5)
+                                        ->get();
+
+            // Financial Summary - PILIHAN 1: Semua transaksi
+            $income = Transaction::where('user_id', $userId)
+                             ->where('type', 'income')
+                             ->sum('amount');
+
+            $expenses = Transaction::where('user_id', $userId)
+                               ->where('type', 'expense')
+                               ->sum('amount');
+
+            // Financial Summary - PILIHAN 2: Bulan ini saja (uncomment jika ingin pakai ini)
+            /*
+            $income = Transaction::where('user_id', $userId)
+                             ->where('type', 'income')
+                             ->whereMonth('date', Carbon::now()->month)
+                             ->whereYear('date', Carbon::now()->year)
+                             ->sum('amount');
+
+            $expenses = Transaction::where('user_id', $userId)
+                               ->where('type', 'expense')
+                               ->whereMonth('date', Carbon::now()->month)
+                               ->whereYear('date', Carbon::now()->year)
+                               ->sum('amount');
+            */
+
+            $financial = [
+                'income' => $income,
+                'expenses' => $expenses,
+                'balance' => $income - $expenses,
+            ];
+
+            return view('dashboard', compact('todos', 'moods', 'selfcares', 'financial'));
+        }
+
+        return redirect()->route('login');
     }
 }

@@ -35,23 +35,37 @@ Route::get('/', function () {
 });
 
 Route::get('/todos', [TodoController::class, 'index'])->name('todos.index');
-Route::post('/todos', [TodoController::class, 'store']);
 Route::post('/todos/{todo}/toggle', [TodoController::class, 'toggle']);
 Route::post('/todos/{todo}/delete', [TodoController::class, 'destroy']);
 Route::post('/todos/{todo}/update', [TodoController::class, 'update']);
+
+// Tampilkan semua todos
+Route::get('/todos', [TodoController::class, 'index'])->name('todos.index');
+
+// Simpan todo baru (INI YANG PENTING)
+Route::post('/todos', [TodoController::class, 'store'])->name('todos.store');
+
 
 Route::middleware('auth')->group(function () {
     // ... routes lainnya
     
     // Mood Tracker Routes
+    Route::resource('moods', MoodTrackerController::class);
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/mood', [MoodTrackerController::class, 'index'])->name('moods.index');
+    Route::post('/mood', [MoodTrackerController::class, 'store'])->name('moods.store');
+});
+
     Route::get('/mood', [MoodTrackerController::class, 'index'])->name('mood.index');
     Route::post('/moods', [MoodTrackerController::class, 'store']);
     Route::post('/moods/{id}/update', [MoodTrackerController::class, 'update']);
     Route::post('/moods/{id}/delete', [MoodTrackerController::class, 'destroy']);
 });
 
-Route::get('/financial', [FinancialController::class, 'index']);
+Route::get('/financial', [FinancialController::class, 'index'])->name('financial.index');
 Route::post('/financial', [FinancialController::class, 'store'])->name('financial.store');
+Route::put('/financial', [FinancialController::class, 'update'])->name('financial.update');
+Route::delete('/financial', [FinancialController::class, 'destroy'])->name('financial.destroy');
 
 // Rute untuk halaman dashboard, hanya bisa diakses setelah login
 Route::get('/dashboard', [AuthController::class, 'showDashboard'])->middleware('auth')->name('dashboard');

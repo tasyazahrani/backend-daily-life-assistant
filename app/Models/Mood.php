@@ -2,18 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Mood extends Model
 {
-    use HasFactory;
+    protected $fillable = ['user_id', 'mood', 'emoji', 'diary_text'];
 
-    protected $fillable = ['mood'];
-
-    // Relasi dengan Diary
-    public function diaries()
+    public function user(): BelongsTo
     {
-        return $this->hasMany(Diary::class);
+        return $this->belongsTo(User::class);
     }
 }

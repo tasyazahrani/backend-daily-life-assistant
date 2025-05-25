@@ -3,35 +3,85 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mood;
-use App\Models\Diary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MoodTrackerController extends Controller
 {
-    // Menampilkan mood selection dan history
-    public function index()
+    public function __construct()
     {
-        $moods = Mood::all(); // Ambil semua mood
-        $diaries = Diary::with('mood')->get(); // Ambil semua diary dan mood terkait
-
-        return view('mood', compact('moods', 'diaries'));
+        $this->middleware('auth');
     }
 
-    // Menyimpan entry mood dan diary
-    public function store(Request $request)
+    public function index()
     {
-        // Validasi input
+        // Ambil mood hanya milik user yang login, diurutkan dari yang terbaru
+        $moods = Auth::user()->moods()->latest()->get();
+        
+        return view('mood', compact('moods'));
+    }
+
+    public function create()
+    {
+        return view('mood'); // atau view yang sesuai untuk form create
+    }
+
+    public function show($id)
+    {
+        $mood = Auth::user()->moods()->findOrFail($id);
+        return view('mood.show', compact('mood'));
+    }
+
+    public function edit($id)
+    {
+        $mood = Auth::user()->moods()->findOrFail($id);
+        return view('mood.edit', compact('mood'));
+    }
+
+    public function store(Request $request)
+{
+    $request->validate([
+        'mood' => 'required',
+        'emoji' => 'required',
+        'diary_text' => 'required',
+    ]);
+
+    Mood::create([
+        'user_id' => Auth::id(),
+        'mood' => $request->mood,
+        'emoji' => $request->emoji,
+        'diary_text' => $request->diary_text,
+    ]);
+
+        return redirect()->route('moods.index')->with('success', 'Mood berhasil ditambahkan!');
+    }
+
+    public function update(Request $request, $id)
+    {
         $request->validate([
-            'mood_id' => 'required|exists:moods,id',
-            'entry' => 'required|string',
+            'diary_text' => 'required|string|max:1000',
         ]);
 
-        // Simpan data diary
-        Diary::create([
-            'mood_id' => $request->mood_id,
-            'entry' => $request->entry,
+        // Cari mood yang hanya milik user yang login
+        $mood = Auth::user()->moods()->findOrFail($id);
+        
+        $mood->update([
+            'diary_text' => $request->diary_text,
         ]);
 
-        return redirect()->route('mood')->with('success', 'Diary entry saved successfully!');
+        return redirect()->route('moods.index')->with('success', 'Mood berhasil diupdate!');
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Hapus mood yang hanya milik user yang login
+            $mood = Auth::user()->moods()->findOrFail($id);
+            $mood->delete();
+
+            return redirect()->route('moods.index')->with('success', 'Mood berhasil dihapus!');
+        } catch (\Exception $e) {
+            return redirect()->route('moods.index')->with('error', 'Gagal menghapus mood!');
+        }
     }
 }

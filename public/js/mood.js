@@ -1,195 +1,120 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Elements
     const moodIcons = document.querySelectorAll('.mood-icon');
+    const selectedMoodInput = document.getElementById('selected-mood');
     const diaryText = document.getElementById('diary-text');
-    const saveButton = document.getElementById('save-entry');
-    const historyContainer = document.getElementById('history-container');
-    
-    // Variables
-    let selectedMood = null;
-    
-    // Initialize existing entries from localStorage
-    loadMoodHistory();
-    
-    // Set up mood selection
+    const diaryForm = document.getElementById('diary-form');
+
+    // Pilih mood, beri tanda selected dan isi input hidden
     moodIcons.forEach(icon => {
         icon.addEventListener('click', function() {
-            // Remove 'selected' class from all icons
-            moodIcons.forEach(item => item.classList.remove('selected'));
-            
-            // Add 'selected' class to the clicked icon
+            // Hapus class 'selected' dari semua
+            moodIcons.forEach(i => i.classList.remove('selected'));
+
+            // Tambah class 'selected' ke yang diklik
             this.classList.add('selected');
-            
-            // Store the selected mood
-            selectedMood = this.getAttribute('data-mood');
+
+            // Ambil mood dari atribut data-mood
+            const mood = this.getAttribute('data-mood');
+
+            // Isi nilai ke input hidden agar dikirim ke server
+            selectedMoodInput.value = mood;
         });
     });
-    
-    // Save diary entry
-    saveButton.addEventListener('click', function() {
-        if (!selectedMood) {
+
+    // Validasi sebelum submit form
+    diaryForm.addEventListener('submit', function(e) {
+        if (!selectedMoodInput.value) {
+            e.preventDefault();
             alert('Please select a mood before saving your entry');
             return;
         }
-        
+
         if (diaryText.value.trim() === '') {
+            e.preventDefault();
             alert('Please write something in your diary before saving');
             return;
         }
+    });
+});
+
+// Auto-hide success/error messages after 4 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    
+    alerts.forEach(function(alert) {
+        // Auto hide after 4 seconds
+        setTimeout(function() {
+            alert.classList.add('fade-out');
+            setTimeout(function() {
+                alert.remove();
+            }, 300);
+        }, 4000);
         
-        // Save the entry
-        saveMoodEntry(selectedMood, diaryText.value);
-        
-        // Reset form
-        moodIcons.forEach(item => item.classList.remove('selected'));
-        diaryText.value = '';
-        selectedMood = null;
-        
-        // Show success message
-        alert('Your mood entry has been saved!');
+        // Allow manual close by clicking
+        alert.addEventListener('click', function() {
+            alert.classList.add('fade-out');
+            setTimeout(function() {
+                alert.remove();
+            }, 300);
+        });
+    });
+});
+
+// Edit functionality for mood entries
+document.addEventListener('DOMContentLoaded', function() {
+    // Edit button click handler
+    document.querySelectorAll('.entry-edit').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const entryId = this.getAttribute('data-entry-id');
+            const content = document.getElementById('content-' + entryId);
+            const editForm = document.getElementById('edit-form-' + entryId);
+            
+            // Hide content and show edit form
+            content.style.display = 'none';
+            editForm.style.display = 'block';
+            
+            // Focus on textarea
+            const textarea = editForm.querySelector('.edit-textarea');
+            textarea.focus();
+            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+        });
     });
     
-    // Function to save mood entry
-    function saveMoodEntry(mood, text) {
-        const currentDate = new Date();
-        
-        // Create entry object
-        const entry = {
-            date: currentDate.toISOString(),
-            formattedDate: formatDate(currentDate),
-            mood: mood,
-            text: text,
-            emoji: getMoodEmoji(mood)
-        };
-        
-        // Get existing entries
-        let entries = JSON.parse(localStorage.getItem('moodEntries')) || [];
-        
-        // Add new entry at the beginning
-        entries.unshift(entry);
-        
-        // Save to localStorage
-        localStorage.setItem('moodEntries', JSON.stringify(entries));
-        
-        // Update the display
-        loadMoodHistory();
-    }
+    // Cancel edit button click handler
+    document.querySelectorAll('.mood-icon').forEach(icon => {
+    icon.addEventListener('click', function () {
+        const selectedMood = this.getAttribute('data-mood');
+        const emoji = this.querySelector('.emoji').innerText;
+
+        document.getElementById('selected-mood').value = selectedMood;
+        document.getElementById('selected-emoji').value = emoji;
+
+        // Optional: kasih highlight ke mood terpilih
+        document.querySelectorAll('.mood-icon').forEach(i => i.classList.remove('selected'));
+        this.classList.add('selected');
+     });
+    });
+
+});
+
+// Existing mood selection code (tambahkan jika belum ada)
+document.addEventListener('DOMContentLoaded', function() {
+    const moodIcons = document.querySelectorAll('.mood-icon');
+    const selectedMoodInput = document.getElementById('selected-mood');
     
-    // Function to load mood history
-    function loadMoodHistory() {
-        // Get entries from localStorage
-        const entries = JSON.parse(localStorage.getItem('moodEntries')) || [];
-        
-        // Clear the container
-        historyContainer.innerHTML = '';
-        
-        // If no entries, add sample entries for demonstration
-        if (entries.length === 0) {
-            addSampleEntries();
-            return;
-        }
-        
-        // Add entries to the container (limit to most recent 8)
-        entries.slice(0, 8).forEach(entry => {
-            const entryElement = createEntryElement(entry);
-            historyContainer.appendChild(entryElement);
-        });
-    }
-    
-    // Function to create an entry element
-    function createEntryElement(entry) {
-        const entryDiv = document.createElement('div');
-        entryDiv.className = 'history-entry';
-        
-        entryDiv.innerHTML = `
-            <div class="entry-header">
-                <span class="entry-date">${entry.formattedDate}</span>
-                <span class="entry-emoji">${entry.emoji}</span>
-            </div>
-            <div class="entry-content">
-                ${entry.text}
-            </div>
-        `;
-        
-        return entryDiv;
-    }
-    
-    // Function to format date
-    function formatDate(date) {
-        const months = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-        
-        const month = months[date.getMonth()];
-        const day = date.getDate();
-        const year = date.getFullYear();
-        
-        return `${month} ${day}, ${year}`;
-    }
-    
-    // Function to get emoji based on mood
-    function getMoodEmoji(mood) {
-        const emojis = {
-            'excited': '😄',
-            'happy': '🙂',
-            'good': '😊',
-            'okay': '😐',
-            'sad': '😞',
-            'stressed': '😣',
-            'exhausted': '😩'
-        };
-        
-        return emojis[mood] || '😐';
-    }
-    
-    // Add sample entries for demonstration
-    function addSampleEntries() {
-        const sampleEntries = [
-            {
-                date: '2025-04-15T12:00:00',
-                formattedDate: 'April 15, 2025',
-                mood: 'excited',
-                text: 'Write about your day and how you\'re feeling...',
-                emoji: '😄'
-            },
-            {
-                date: '2025-04-10T12:00:00',
-                formattedDate: 'April 10, 2025',
-                mood: 'happy',
-                text: 'Write about your day and how you\'re feeling...',
-                emoji: '🙂'
-            },
-            {
-                date: '2025-04-08T12:00:00',
-                formattedDate: 'April 8, 2025',
-                mood: 'stressed',
-                text: 'Write about your day and how you\'re feeling...',
-                emoji: '😣'
-            },
-            {
-                date: '2025-04-01T12:00:00',
-                formattedDate: 'April 1, 2025',
-                mood: 'good',
-                text: 'Write about your day and how you\'re feeling...',
-                emoji: '😊'
-            }
-        ];
-        
-        // Save to localStorage
-        localStorage.setItem('moodEntries', JSON.stringify(sampleEntries));
-        
-        // Update display
-        loadMoodHistory();
-    }
-    
-    // Menu item click handler
-    const menuItems = document.querySelectorAll('.sidebar-menu li');
-    
-    menuItems.forEach(item => {
-        item.addEventListener('click', function() {
-            menuItems.forEach(i => i.classList.remove('active'));
+    moodIcons.forEach(function(icon) {
+        icon.addEventListener('click', function() {
+            // Remove active class from all icons
+            moodIcons.forEach(function(i) {
+                i.classList.remove('active');
+            });
+            
+            // Add active class to clicked icon
             this.classList.add('active');
+            
+            // Set selected mood value
+            const mood = this.getAttribute('data-mood');
+            selectedMoodInput.value = mood;
         });
     });
 });

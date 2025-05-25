@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Mood;
 
 class User extends Authenticatable
 {
@@ -35,6 +36,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    public function moods()
+{
+    return $this->hasMany(Mood::class);
+}
+
     /**
      * The attributes that should be cast.
      *
@@ -58,3 +65,4 @@ class User extends Authenticatable
         return asset('storage/' . $value); // Menghasilkan URL lengkap ke gambar yang disimpan di storage
     }
 }
+

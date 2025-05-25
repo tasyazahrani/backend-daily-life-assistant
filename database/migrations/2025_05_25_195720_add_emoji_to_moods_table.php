@@ -11,14 +11,12 @@ return new class extends Migration
      *
      * @return void
      */
-   public function up()
-{
-    Schema::create('moods', function (Blueprint $table) {
-        $table->id();
-        $table->string('mood');
-        $table->timestamps();
-    });
-}
+    public function up()
+    {
+        Schema::table('moods', function (Blueprint $table) {
+            $table->string('emoji')->nullable();
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -27,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('moods');
+        Schema::table('moods', function (Blueprint $table) {
+            //
+        });
     }
 };
