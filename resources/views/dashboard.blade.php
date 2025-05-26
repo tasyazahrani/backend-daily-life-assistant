@@ -36,22 +36,21 @@
 
     <!-- Mood History -->
     <div class="card">
-        <h3>Mood History</h3>
-        <div class="mood-history">
-            @forelse($moods as $mood)
-                <div class="mood-day">
-                    <div class="emoji">{{ $mood->emoji }}</div>
-                        <p class="mood-date">{{ $mood->created_at->format('l, d M Y') }}</p>
-                        <p class="mood-text">Feeling: <strong>{{ $mood->mood }}</strong></p>
-                        <p class="diary">{{ $mood->diary_text }}</p>
-                    </div>
-                </div>
-            @empty
-                <p>No mood history available.</p>
-            @endforelse
-
-        </div>
+    <h3>Mood Hari Ini</h3>
+    <div class="mood-history">
+        @if($mood)
+            <div class="mood-day">
+                <div class="emoji">{{ $mood->emoji }}</div>
+                <p class="mood-date">{{ $mood->created_at->format('l, d M Y') }}</p>
+                <p class="mood-text">Feeling: <strong>{{ $mood->mood }}</strong></p>
+                <p class="diary">{{ $mood->diary_text }}</p>
+            </div>
+        @else
+            <p>No mood entry for today.</p>
+        @endif
     </div>
+</div>
+
 
     <!-- Self-Care Status -->
     <div class="card">

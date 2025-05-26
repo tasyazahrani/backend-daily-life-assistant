@@ -108,8 +108,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/delete', [ProfileController::class, 'deleteAccount'])->name('profile.delete');
 });
 
-Route::get('/selfcare', function () {
-    return view('selfcare');
+use App\Http\Controllers\SelfCareController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/selfcare', [SelfCareController::class, 'index'])->name('selfcare.index');
+    Route::post('/selfcare', [SelfCareController::class, 'store'])->name('selfcare.store');
+    Route::post('/selfcare/toggle/{id}', [SelfCareController::class, 'toggle'])->name('selfcare.toggle');
 });
 
 use App\Http\Controllers\QuoteController;

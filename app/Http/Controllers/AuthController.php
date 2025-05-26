@@ -81,10 +81,11 @@ class AuthController extends Controller
                         ->get();
 
             // Mood terbaru (5 terakhir)
-            $moods = Mood::where('user_id', $userId)
-                        ->latest()
-                        ->take(5)
-                        ->get();
+            $mood = Mood::where('user_id', $userId)
+            ->whereDate('created_at', Carbon::today())
+            ->latest()
+            ->first();
+
 
             // Self-care hari ini
             $selfcares = SelfCareActivity::where('user_id', $userId)
@@ -123,7 +124,7 @@ class AuthController extends Controller
                 'balance' => $income - $expenses,
             ];
 
-            return view('dashboard', compact('todos', 'moods', 'selfcares', 'financial'));
+            return view('dashboard', compact('todos', 'mood', 'selfcares', 'financial'));
         }
 
         return redirect()->route('login');
