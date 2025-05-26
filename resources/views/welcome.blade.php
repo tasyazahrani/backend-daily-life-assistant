@@ -44,8 +44,7 @@
                 <div class="hero-text">
                     <h1>Kembangkan keseimbanganmu dengan cara baru dan unik</h1>
                     <p>Sistem pendukung aktivitas harian khusus untuk mahasiswi produktif yang ingin mencapai keseimbangan hidup.</p>
-                    <a href="{{ route('register') }}" class="btn btn-primary">Daftar</a>
-                    <a href="{{ route('login') }}" class="btn btn-secondary">Masuk</a>
+                    <a href="#fitur" class="btn btn-primary">Lihat selengkapnya</a>
                 </div>
                 <div class="hero-image">
                 <img src="{{ asset('images/user.png') }}" alt="Deskripsi Gambar">
