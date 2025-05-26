@@ -247,7 +247,7 @@
         </div>
         
         <div class="keunggulan-cta">
-            <a href="#" class="btn btn-primary">Mulai Perjalanan Produktif</a>
+            <a href="{{ route('register') }}" class="btn btn-primary">Mulai perjalanan produktif</a>
         </div>
     </div>
 </section>
